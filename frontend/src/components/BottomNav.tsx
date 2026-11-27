@@ -7,7 +7,7 @@ interface Props {
   onChange: (tab: TabName) => void;
 }
 
-const ITEMS: { id: TabName; label: string; Icon: React.FC<{ className?: string }> }[] = [
+const ITEMS: { id: TabName; label: string; Icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'home', label: 'Home', Icon: Home },
   { id: 'report', label: 'Report', Icon: BarChart3 },
   { id: 'history', label: 'History', Icon: History },

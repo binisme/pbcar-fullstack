@@ -1,7 +1,16 @@
 import { io, Socket } from 'socket.io-client';
 import type { AppSettings, HistoryResponse, ParkState, RevenueReport, TimeScope } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_API_URL?: string;
+  }
+  interface ImportMeta {
+    readonly env: ImportMetaEnv;
+  }
+}
+
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${url}`, {
@@ -63,8 +72,9 @@ export const parkApi = {
 };
 
 export function createRealtimeSocket(): Socket {
-  return io(API_BASE || undefined, {
+  const opts = {
     transports: ['websocket', 'polling'],
     reconnection: true,
-  });
+  };
+  return API_BASE ? io(API_BASE, opts) : io(opts);
 }
